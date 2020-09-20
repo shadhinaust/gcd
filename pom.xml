@@ -11,7 +11,7 @@
 	<groupId>com.mohit</groupId>
 	<artifactId>gcd</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	<name>gcd</name>
 	<description>Collects google calendar data</description>
 
