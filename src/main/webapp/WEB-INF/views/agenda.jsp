@@ -22,6 +22,14 @@
             </tr>
         </c:forEach>
     </table>
+    <h3>Free slots</h3>
+    <table>
+        <c:forEach items="${freeSlots}" var="freeSlot">
+            <tr>
+                <td>${freeSlot.getTime()}</td>
+            </tr>
+        </c:forEach>
+    </table>
     <form method="get" action="/agenda">
         <p>
             <input type="submit" value="Refresh"/>

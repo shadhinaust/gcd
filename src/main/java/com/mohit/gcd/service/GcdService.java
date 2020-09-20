@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface GcdService {
     List<Agenda> getAllAgendas(Calendar calendar);
+    List<Agenda> getAllFreeTime(List<Agenda> agendas);
 }

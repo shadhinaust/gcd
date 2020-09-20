@@ -73,12 +73,14 @@ public class GcdController {
     public String oauth2SuccessCallback(ModelMap modelMap, @RequestParam(value = "code") String code) {
         String message = "Upcoming events";
         List<Agenda> agendas = new ArrayList<>();
+        List<Agenda> freeSlots = new ArrayList<>();
         try {
             TokenResponse tokenResponse = flow.newTokenRequest(code).setRedirectUri(REDIRECT_URI).execute();
             credential = flow.createAndStoreCredential(tokenResponse, "userID");
             calendar = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
                     .setApplicationName(APPLICATION_NAME).build();
             agendas = gcdService.getAllAgendas(calendar);
+            freeSlots = gcdService.getAllFreeTime(agendas);
             if(agendas.isEmpty()){
                 message = "No upcoming events";
             }
@@ -88,6 +90,7 @@ public class GcdController {
         }
         modelMap.addAttribute("message", message);
         modelMap.addAttribute("agendas", agendas);
+        modelMap.addAttribute("freeSlots", freeSlots);
         return "agenda";
     }
 

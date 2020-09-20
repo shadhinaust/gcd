@@ -54,4 +54,29 @@ public class GcdServiceImpl implements GcdService {
                 .collect(Collectors.toList());
         return sortedAgendas;
     }
+
+    @Override
+    public List<Agenda> getAllFreeTime(List<Agenda> agendas) {
+        List<Agenda> freeSlots = new ArrayList<>();
+        LocalDateTime min = LocalDateTime.now();
+        LocalDateTime max = min.toLocalDate().atTime(23,59,59,999);
+        if(!agendas.isEmpty()){
+            for (Agenda agenda: agendas) {
+                if(min.isBefore(agenda.getStart())) {
+                    Agenda free = new Agenda();
+                    free.setStart(min);
+                    free.setEnd(agenda.getStart());
+                    freeSlots.add(free);
+                }
+                min = min.isAfter(agenda.getEnd()) ? min : agenda.getEnd();
+            }
+        }
+        if(min.isBefore(max)){
+            Agenda free = new Agenda();
+            free.setStart(min);
+            free.setEnd(max);
+            freeSlots.add(free);
+        }
+        return freeSlots;
+    }
 }
