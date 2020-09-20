@@ -25,3 +25,12 @@ Run throw IDE or cmd
 3. Available current time slots.
 4. Test cases.
 
+###### References
+1. https://developers.google.com/calendar/quickstart/java
+2. https://github.com/kriscfoster/SpringOAuth2Demo
+3. https://libs.garden/java/a2cart/google-calendar-api
+4. https://github.com/RameshMF/todo-application-jsp-servlet-jdbc-mysql
+5. https://developers.google.com/calendar/v3/reference/events/list
+6. https://dzone.com/articles/build-package-and-run-spring-boot-apps-with-docker
+7. https://stackoverflow.com/questions/27767264/how-to-dockerize-maven-project-and-how-many-ways-to-accomplish-it
+
