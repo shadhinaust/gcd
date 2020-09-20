@@ -94,7 +94,7 @@ public class GcdController {
     @RequestMapping(value = "login/oauth2/code/google", method = RequestMethod.GET, params = "error")
     public String oauth2ErrorCallback(ModelMap modelMap, @RequestParam(value = "error") String error) {
         modelMap.addAttribute("status", false);
-        modelMap.addAttribute("message", error);
+        modelMap.addAttribute("message", "Unauthorized");
         modelMap.addAttribute("agendas", null);
         modelMap.addAttribute("freeSlots", null);
         return "error";

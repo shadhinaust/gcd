@@ -7,9 +7,7 @@ import com.google.api.services.calendar.model.Events;
 import com.mohit.gcd.model.Agenda;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -19,13 +17,14 @@ import java.util.stream.Collectors;
 @Service
 public class GcdServiceImpl implements GcdService {
     @Override
-    public List<Agenda> getAllAgendas(Calendar calendar) {
+    public List<Agenda> getAllAgendas(Calendar calendar) throws Exception {
         List<Agenda> agendas = new ArrayList<>();
         try {
             long now = System.currentTimeMillis();
             DateTime minDate = new DateTime(now);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'z'");
-            DateTime maxDate = new DateTime(LocalDateTime.now().toLocalDate().atTime(23,59,59,999).format(formatter));
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+            ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.now().toLocalDate().atTime(23,59,59,999), ZoneId.systemDefault());
+            DateTime maxDate = new DateTime(zonedDateTime.format(formatter));
             Events events = calendar.events()
                     .list("primary")
                     .setTimeMin(minDate)
@@ -46,7 +45,7 @@ public class GcdServiceImpl implements GcdService {
                 }
             }
         } catch (Exception exception) {
-            agendas = new ArrayList<>();
+            throw new Exception("Internal server error!");
         }
         List<Agenda> sortedAgendas = agendas.stream()
                 .sorted(Comparator.comparingLong(Agenda::getDuration))
