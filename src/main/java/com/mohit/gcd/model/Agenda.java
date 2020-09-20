@@ -2,6 +2,7 @@ package com.mohit.gcd.model;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Agenda {
@@ -15,7 +16,7 @@ public class Agenda {
     }
 
     public void setStart(LocalDateTime start) {
-        this.start = start;
+        this.start = ZonedDateTime.of(start, ZoneId.systemDefault()).toLocalDateTime();
     }
 
     public LocalDateTime getEnd() {
@@ -23,7 +24,7 @@ public class Agenda {
     }
 
     public void setEnd(LocalDateTime end) {
-        this.end = end;
+        this.end = ZonedDateTime.of(end, ZoneId.systemDefault()).toLocalDateTime();
     }
 
     public String getTime() {
