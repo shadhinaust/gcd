@@ -9,17 +9,13 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
-import com.google.api.services.calendar.model.Event;
-import com.google.api.services.calendar.model.Events;
 import com.mohit.gcd.model.Agenda;
 import com.mohit.gcd.service.GcdService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,12 +43,12 @@ public class GcdController {
     private static HttpTransport HTTP_TRANSPORT;
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
-    private static Calendar calendar;
+    private static String REDIRECT_URI = "http://localhost:8080/login/oauth2/code/google";
+    private static Calendar CALENDAR;
+
     GoogleClientSecrets clientSecrets;
     GoogleAuthorizationCodeFlow flow;
     Credential credential;
-
-    private static String REDIRECT_URI = "http://localhost:8080/login/oauth2/code/google";
 
     @RequestMapping("")
     public String home() {
@@ -77,17 +73,18 @@ public class GcdController {
         try {
             TokenResponse tokenResponse = flow.newTokenRequest(code).setRedirectUri(REDIRECT_URI).execute();
             credential = flow.createAndStoreCredential(tokenResponse, "userID");
-            calendar = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+            CALENDAR = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
                     .setApplicationName(APPLICATION_NAME).build();
-            agendas = gcdService.getAllAgendas(calendar);
-            freeSlots = gcdService.getAllFreeTime(agendas);
+            agendas = gcdService.getAllAgendas(CALENDAR);
             if(agendas.isEmpty()){
                 message = "No upcoming events";
             }
+            freeSlots = gcdService.getAllFreeTime(agendas);
         } catch (Exception exception) {
             message = "Opps! Internal Server error.";
             logger.info(exception.getMessage());
         }
+        modelMap.addAttribute("status", true);
         modelMap.addAttribute("message", message);
         modelMap.addAttribute("agendas", agendas);
         modelMap.addAttribute("freeSlots", freeSlots);
@@ -96,13 +93,11 @@ public class GcdController {
 
     @RequestMapping(value = "login/oauth2/code/google", method = RequestMethod.GET, params = "error")
     public String oauth2ErrorCallback(ModelMap modelMap, @RequestParam(value = "error") String error) {
-        modelMap.addAttribute("message", "Unauthorized");
+        modelMap.addAttribute("status", false);
+        modelMap.addAttribute("message", error);
+        modelMap.addAttribute("agendas", null);
+        modelMap.addAttribute("freeSlots", null);
         return "error";
-    }
-
-    @RequestMapping(value = "events", method = RequestMethod.GET, params = "error")
-    public String events(@RequestParam(value = "error") Events events, @RequestParam(value = "error") String error) {
-        return "index";
     }
 
     public String getAuthorization() throws IOException, GeneralSecurityException {
