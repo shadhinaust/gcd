@@ -71,7 +71,7 @@ public class GcdController {
 
     @RequestMapping(value = "/login/oauth2/code/google", method = RequestMethod.GET, params = "code")
     public String oauth2SuccessCallback(ModelMap modelMap, @RequestParam(value = "code") String code) {
-        String message = "";
+        String message = "Upcoming events";
         List<Agenda> agendas = new ArrayList<>();
         try {
             TokenResponse tokenResponse = flow.newTokenRequest(code).setRedirectUri(REDIRECT_URI).execute();
@@ -79,6 +79,9 @@ public class GcdController {
             calendar = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
                     .setApplicationName(APPLICATION_NAME).build();
             agendas = gcdService.getAllAgendas(calendar);
+            if(agendas.isEmpty()){
+                message = "No upcoming events";
+            }
         } catch (Exception exception) {
             message = "Opps! Internal Server error.";
             logger.info(exception.getMessage());

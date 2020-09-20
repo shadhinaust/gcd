@@ -17,8 +17,8 @@
     <table>
         <c:forEach items="${agendas}" var="agenda">
             <tr>
-                <td>${agenda.time}</td>
-                <td>${agenda.description}</td>
+                <td>${agenda.getTime()}</td>
+                <td>${agenda.getSummary()}</td>
             </tr>
         </c:forEach>
     </table>
