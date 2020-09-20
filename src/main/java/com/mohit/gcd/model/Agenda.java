@@ -43,7 +43,7 @@ public class Agenda {
         this.summary = summary;
     }
 
-    public long getDifference() {
+    public long getDuration() {
         ZoneId zoneId = ZoneId.systemDefault();
         return end.atZone(zoneId).toEpochSecond() - start.atZone(zoneId).toEpochSecond();
     }

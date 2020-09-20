@@ -11,9 +11,9 @@
 	<groupId>com.mohit</groupId>
 	<artifactId>gcd</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>gcd</name>
-	<description>Collects google calendar data </description>
+	<description>Collects google calendar data</description>
 
 	<properties>
 		<java.version>11</java.version>
@@ -81,6 +81,15 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.7.0</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -90,6 +99,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>gcd-app</finalName>
 	</build>
 
 </project>

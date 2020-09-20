@@ -49,7 +49,7 @@ public class GcdServiceImpl implements GcdService {
             agendas = new ArrayList<>();
         }
         List<Agenda> sortedAgendas = agendas.stream()
-                .sorted(Comparator.comparingLong(Agenda::getDifference))
+                .sorted(Comparator.comparingLong(Agenda::getDuration))
                 .sorted(Comparator.comparing(Agenda::getStart))
                 .collect(Collectors.toList());
         return sortedAgendas;
